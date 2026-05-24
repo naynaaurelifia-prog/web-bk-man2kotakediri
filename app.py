@@ -7,7 +7,9 @@ app = Flask(__name__)
 
 # Konfigurasi Database (SQLite)
 basedir = os.path.abspath(os.path.dirname(__file__))
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'pelanggaran.db')
+# Gunakan database di folder /tmp agar Vercel tidak error saat mencoba membaca/menulis
+db_path = os.path.join('/tmp', 'pelanggaran.db')
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + db_path
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
