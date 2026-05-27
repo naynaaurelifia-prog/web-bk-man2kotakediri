@@ -22,11 +22,10 @@ class Pelanggaran(db.Model):
     jenis_pelanggaran = db.Column(db.String(100), nullable=False)
     waktu = db.Column(db.DateTime, default=datetime.now)
     pelapor = db.Column(db.String(100))
+    password = db.Column(db.String(100), nullable-True)
 
 # Buat database otomatis saat dijalankan
 with app.app_context():
-    db.create_all()
-    with app.app_context():
     db.create_all()
     
     data_kelas = {
@@ -102,12 +101,12 @@ def petugas():
 @app.route('/login_siswa', methods=['GET', 'POST'])
 def login_siswa():
     if request.method == 'POST':
-        Nama_input = request.form.get('Nama')
+        nama_input = request.form.get('nama')
         password_input = request.form.get('password')
 
-        user = Pelanggaran.query.filter_by(Nama_Siswa=Nama_input).first()
-        if user and use.password == password_input:
-            return redirect(url_for('Siswa'))
+        user = Pelanggaran.query.filter_by(nama_niswa=nama_input).first()
+        if user and user.password == password_input:
+            return redirect(url_for('siswa'))
         else:
             return "Login Gagal, Cek Nama/Password!"
     return render_template('login_siswa.html')
@@ -128,4 +127,4 @@ def guru():
     return render_template('guru.html', laporan=laporan_semua)
 
 if __name__ == "__main__":
-    app.run(debug=True, host='0.0.0.0')
+    app.run(debug=True)
