@@ -53,14 +53,14 @@ def petugas():
 @app.route('/login_siswa', methods=['GET', 'POST'])
 def login_siswa():
     if request.method == 'POST':
-        nisn = request.form.get('nisn')
-        password = request.form.get('password')
+        Nama_input = request.form.get('Nama')
+        password_input = request.form.get('password')
 
-        user = Siswa.query.filter_by(nisn=nisn, password=password).first()
-        if user:
-            return redirect(url_for('dashboard_siswa'))
+        user = Pelanggaran.query.filter_by(Nama_Siswa=Nama_input).first()
+        if user and use.password == password_input:
+            return redirect(url_for('Siswa'))
         else:
-            return "Login Gagal, Cek NISN/Password!"
+            return "Login Gagal, Cek Nama/Password!"
     return render_template('login_siswa.html')
 
     
