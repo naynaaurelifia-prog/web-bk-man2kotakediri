@@ -45,8 +45,10 @@ def petugas():
         db.session.add(data_baru)
         db.session.commit()
         return redirect(url_for('guru'))
-    
+        
     return render_template('petugas.html')
+    
+
 
 @app.route('/login_siswa', methods=['GET', 'POST'])
 def login_siswa():
@@ -59,9 +61,9 @@ def login_siswa():
             return redirect(url_for('dashboard_siswa'))
         else:
             return "Login Gagal, Cek NISN/Password!"
-
     return render_template('login_siswa.html')
 
+    
 @app.route('/siswa', methods=['GET', 'POST'])
 def siswa():
     hasil = None
