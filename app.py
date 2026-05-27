@@ -48,6 +48,20 @@ def petugas():
     
     return render_template('petugas.html')
 
+@app.route('/login_siswa', methods=['GET', 'POST'])
+def login_siswa():
+    if request.method == 'POST':
+        nisn = request.form.get('nisn')
+        password = request.form.get('password')
+
+        user = Siswa.query.filter_by(nisn=nisn, password=password).first()
+        if user:
+            return redirect(url_for('dashboard_siswa'))
+        else:
+            return "Login Gagal, Cek NISN/Password!"
+
+    return render_template('login_siswa.html')
+
 @app.route('/siswa', methods=['GET', 'POST'])
 def siswa():
     hasil = None
