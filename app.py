@@ -26,6 +26,55 @@ class Pelanggaran(db.Model):
 # Buat database otomatis saat dijalankan
 with app.app_context():
     db.create_all()
+    with app.app_context():
+    db.create_all()
+    
+    data_kelas = {
+        'AFRIALDY': 'afrialdy123',
+        'AHMAD FAIRUZ NADHIR AMRULLOH': 'faiz123',
+        'AHMADA DAKA ELJEISA FATIR': 'jesa123',
+        'ANNISA AZIZAH NUR AQLIS': 'annisa123',
+        'ASHFA ALYA': 'ashfa123',
+        'CINTA TARISA': 'cinta123',
+        'DAMAR SATRIO WIBOWO': 'damar123',
+        'DEVINA AURALIA IMANDA PUTRI': 'devina123',
+        'CAKRA PAMBAYUN': 'cakra123',
+        'GAYATRI NASTITI DWI HAPSARI': 'aya123',
+        'HABLY WAFIROTAL IZZAH': 'hably123',
+        'IQLIMA AINUN HANIFAH': 'hani123',
+        'JASMINE PRAMESWARI WAHYUDI': 'jasmine123',
+        'KALILA SALSABILA': 'kalila123',
+        'MALVA ANASIRUL RAHMAH': 'malva123',
+        'MOH.ANANDA RIZKY FAUZI': 'rizky123',
+        'MUHAMMAD DAVIN REZQYANO': 'davin123',
+        'MUHAMMAD GALVIN SOBIRIN': 'galvin123',
+        'MUHAMMAD HAFIDZUL BAYDHOWI': 'owi123',
+        'MUHAMMAD HAFIDZUS SALAM': 'salam123',
+        'NADHIFA AQILAH': 'nadhifa123',
+        'NAYNA KEISYA AURELIFIA': 'nayna123',
+        'NUZULIKHAN  LANGIT  ALFASANAH': 'zulkha123',
+        'OBBIE ABRAR RASHEESA': 'obbie123',
+        'PRINCESS ANNABELLE RAHMA HUWAIDA': 'abel123',
+        'PUTRI AYU AURA RAMADHANI': 'ayu123',
+        'RADITHYA ALTHAF HUDA RAMADHAN': 'althaf123',
+        'RAFA WAHYUZAKY ANANDIKA': 'rafa123',
+        'RAJA AULIA RIZQY PRIHARTONO': 'raja123',
+        'SEPTHIA PUTRI WAGITA': 'tia123',
+        'STEFANIE QUEEN': 'fani123',
+        'SYIFA AMELIA ARTANTI': 'syifa123',
+        'TANAYA RISWANA MAHARANI': 'naya123',
+        'VERRINSYANA VHIMALA': 'vivi123',
+        'ZIANKA QOLBI UDZMA ISLAMEY': 'zizi123' 
+    }
+    
+    for nama, pw in data_kelas.items():
+        cek_siswa = Pelanggaran.query.filter_by(nama_siswa=nama).first()
+        if not cek_siswa:
+            siswa_baru = Pelanggaran(nama_siswa=nama, password=pw, kelas='10')
+            db.session.add(siswa_baru)
+    
+    db.session.commit()
+    print("Data kelas berhasil disuntikkan!")
 
 @app.route('/')
 def home():
