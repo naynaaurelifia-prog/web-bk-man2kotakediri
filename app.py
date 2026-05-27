@@ -65,7 +65,7 @@ def login_siswa():
 @app.route('/siswa', methods=['GET', 'POST'])
 def siswa():
     hasil = None
-    nama_input = None
+    nama_input = ""
     if request.method == 'POST':
         nama_input = request.form.get('nama')
         hasil = Pelanggaran.query.filter(Pelanggaran.nama_siswa.like(f'%{nama_input}%')).all()
