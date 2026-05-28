@@ -122,6 +122,12 @@ def guru():
     
     # Dikirim dengan nama variabel 'riwayat' agar terbaca di guru.html kamu
     return render_template('guru.html', riwayat=semua_laporan, nama_guru=nama_bk)
-
+@app.route('/hapus/<int;id>;)
+def hapus_laporan(id):
+    laporan = Riwayat.uery.get(id)
+    if laporan:
+        db.session.delete(laporan)
+        db.session.commit()
+    return redirect('/guru')
 if __name__ == "__main__":
     app.run(debug=True)
