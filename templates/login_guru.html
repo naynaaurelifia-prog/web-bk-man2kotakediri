@@ -7,14 +7,30 @@
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
         
-        /* Background biru besar seperti di aplikasi utama kamu */
-        body { 
-            background: #0b4b6b; /* Sesuaikan dengan warna background utama MAN 2 kamu */
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            height: 100vh; 
+body {
+            background: linear-gradient(135deg, rgba(45, 62, 150, 0.9) 0%, rgba(26, 37, 90, 0.95) 100%), 
+            url("{{ url_for('static', filename='1000107070.jpg') }}");
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh
+
         }
+
+        /* Overlay gelap supaya gambar sekolahnya tetap kelihatan tapi teks terbaca */
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1;
+        }
+
 
         /* Card Utama dengan Lengkungan Gede (Padding Pas) */
         .login-card { 
