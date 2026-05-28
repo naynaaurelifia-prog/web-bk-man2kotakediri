@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
 import os
 from datetime import datetime
@@ -6,9 +6,8 @@ from datetime import datetime
 app = Flask(__name__)
 
 # Konfigurasi Database
-db_path = os.path.join('/tmp', 'database_v4.db')
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + db_path
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SQLALCHEMY_DATABABASE_URI'] = 'sqlite:///database_aman.db'
+app.config['SECRET_KEY'] = 'berylaurel'
 
 db = SQLAlchemy(app)
 
@@ -91,7 +90,7 @@ def petugas():
         laporan_baru = Riwayat(nama_siswa=nama, kelas=kelas, jenis_pelanggaran=pelanggaran)
         db.session.add(laporan_baru)
         db.session.commit()
-        return "<h1>Laporan Berhasil Terkirim!<h1><a href='/'>Kembali ke Menu Utama</a>"
+        flash("Laporan Berhasil Terkirim ke Guru BK!")
     return render_template('petugas.html')
 
 # INI KODE HAPUSNYA (PASTIKAN POSISINYA SEPERTI INI)
