@@ -1,12 +1,11 @@
 from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
-from datetime import datetime
 import os
 
 app = Flask(__name__)
 
-# Konfigurasi Database - Gunakan V3 biar bener-bener fresh
-db_path = os.path.join('/tmp', 'database_v3.db')
+# Konfigurasi Database - Gunakan V4 biar bener-bener fresh dan bersih
+db_path = os.path.join('/tmp', 'database_v4.db')
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + db_path
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
@@ -19,10 +18,9 @@ class Pelanggaran(db.Model):
     password = db.Column(db.String(100), nullable=True)
     kelas = db.Column(db.String(20), default='10')
 
-# Buat Database dan Isi Nama Teman
+# Buat Database dan Isi Nama Teman Otomatis
 with app.app_context():
     db.create_all()
-    # Daftar nama temanmu
     teman = {
         'AFRIALDY': 'afrialdy123', 'AHMAD FAIRUZ NADHIR AMRULLOH': 'faiz123',
         'AHMADA DAKA ELJEISA FATIR': 'jesa123', 'ANNISA AZIZAH NUR AQLIS': 'annisa123',
@@ -59,20 +57,23 @@ def login_siswa():
         pw_input = request.form.get('password')
         user = Pelanggaran.query.filter_by(nama_siswa=nama_input).first()
         if user and user.password == pw_input:
-            return redirect(url_for('siswa'))
+            # Mengalihkan halaman sambil membawa data nama yang login
+            return redirect(url_for('siswa', nama=nama_input))
         return "Login Gagal! Cek Nama (KAPITAL) & Password."
     return render_template('login_siswa.html')
 
 @app.route('/siswa')
 def siswa():
-    class SiswaDummy:
-        nama_siswa = "NAYNA KEISYA AURELIFIA"
-        kelas = "10"
-    riwayat = []
-    return render_template('siswa.html', siswa=SiswaDummy, riwayat_riwayat)
+    # Mengambil nama dari URL, kalau tidak ada defaultnya NAYNA
+    nama_user = request.args.get('nama', 'NAYNA KEISYA AURELIFIA')
     
-   
-     
+    # Bikin data dictionary sederhana buat dikirim ke HTML
+    data_siswa = {
+        'nama_siswa': nama_user,
+        'kelas': '10'
+    }
+    
+    return render_template('siswa.html', siswa=data_siswa, riwayat=[])
 
 if __name__ == "__main__":
     app.run(debug=True)
