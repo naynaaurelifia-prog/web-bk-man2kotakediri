@@ -79,10 +79,21 @@ def siswa():
 def petugas():
     return render_template('petugas.html')
 
-@app.route('/guru')
+@app.route('/login_guru')
+def login_guru():
+    if request.method == 'POST',:
+        nama_input = request.form.get('nama-guru')
+        pw_input = request.form.get('password')
+        if pw_input == 'IECM2KK':
+            return redirect(url_for('guru', nama=nama_input))
+        return "Login Guru Gagal! Password admin salah."
+    return render_template('login_guru.html')
+
+@app.route(/guru)
 def guru():
+    nama_bk = request.args.get('nama', 'Guru BK')
     semua_data = Pelanggaran.query.all()
-    return render_template('guru.html', data_pelanggaran=semua_data)
+    return render_template('guru.html', data_pelanggaran=semua_data, nama_guru=nama_bk)
     
 
 if __name__ == "__main__":
