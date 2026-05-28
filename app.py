@@ -16,25 +16,21 @@ db = SQLAlchemy(app)
 # MODEL DATABASE
 # =======================================================
 
-# Model 1: Untuk Data Akun Siswa & Login
 class Pelanggaran(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     nama_siswa = db.Column(db.String(100), nullable=False)
     password = db.Column(db.String(100), nullable=True)
     kelas = db.Column(db.String(20), default='10')
 
-# Model 2: Untuk Menyimpan Laporan Pelanggaran (FIXED)
 class Riwayat(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     nama_siswa = db.Column(db.String(100), nullable=False)
     kelas = db.Column(db.String(20), nullable=False)
     jenis_pelanggaran = db.Column(db.String(100), nullable=False)
-    waktu = db.Column(db.DateTime, default=datetime.now) # Otomatis catat waktu lapor
+    waktu = db.Column(db.DateTime, default=datetime.now)
 
-# Isi database otomatis saat aplikasi pertama kali jalan
 with app.app_context():
     db.create_all()
-    # List nama teman-teman kelas X-10
     teman = {
         'AFRIALDY': 'afrialdy123', 'AHMAD FAIRUZ NADHIR AMRULLOH': 'faiz123',
         'AHMADA DAKA ELJEISA FATIR': 'jesa123', 'ANNISA AZIZAH NUR AQLIS': 'annisa123',
@@ -61,7 +57,7 @@ with app.app_context():
     db.session.commit()
 
 # =======================================================
-# ROUTES / HALAMAN
+# ROUTES
 # =======================================================
 
 @app.route('/')
@@ -83,8 +79,6 @@ def login_siswa():
 def siswa():
     nama_user = request.args.get('nama', 'SISWA')
     data_siswa = {'nama_siswa': nama_user, 'kelas': '10'}
-    
-    # Menampilkan riwayat milik siswa yang sedang login saja
     catatan_siswa = Riwayat.query.filter_by(nama_siswa=nama_user).all()
     return render_template('siswa.html', siswa=data_siswa, riwayat=catatan_siswa)
 
@@ -94,14 +88,20 @@ def petugas():
         nama = request.form.get('nama_siswa')
         kelas = request.form.get('kelas')
         pelanggaran = request.form.get('jenis_pelanggaran')
-        
-        # MEMBUAT LAPORAN (FIXED TYPO & MODEL)
         laporan_baru = Riwayat(nama_siswa=nama, kelas=kelas, jenis_pelanggaran=pelanggaran)
         db.session.add(laporan_baru)
-        db.session.commit() # Menyimpan permanen ke database_v4.db
-        
+        db.session.commit()
         return redirect('/guru')
     return render_template('petugas.html')
+
+# INI KODE HAPUSNYA (PASTIKAN POSISINYA SEPERTI INI)
+@app.route('/hapus/<int:id>')
+def hapus_laporan(id):
+    laporan = Riwayat.query.get(id)
+    if laporan:
+        db.session.delete(laporan)
+        db.session.commit()
+    return redirect('/guru')
 
 @app.route('/login_guru', methods=['GET', 'POST'])
 def login_guru():
@@ -116,18 +116,8 @@ def login_guru():
 @app.route('/guru')
 def guru():
     nama_bk = request.args.get('nama', 'Guru BK')
-    
-    # MENGAMBIL DATA DARI MODEL RIWAYAT (FIXED)
     semua_laporan = Riwayat.query.all()
-    
-    # Dikirim dengan nama variabel 'riwayat' agar terbaca di guru.html kamu
     return render_template('guru.html', riwayat=semua_laporan, nama_guru=nama_bk)
-@app.route('/hapus/<int;id>;)
-def hapus_laporan(id):
-    laporan = Riwayat.uery.get(id)
-    if laporan:
-        db.session.delete(laporan)
-        db.session.commit()
-    return redirect('/guru')
+
 if __name__ == "__main__":
     app.run(debug=True)
