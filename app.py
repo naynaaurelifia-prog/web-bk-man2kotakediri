@@ -65,12 +65,13 @@ def login_siswa():
 
 @app.route('/siswa')
 def siswa():
-    siswa_login = Pelanggaran.query.filter_by(nama_siswa='NAYNA KEISYA AURELIFIA').first()
+    class SiswaDummy:
+        nama_siswa = "NAYNA KEISYA AURELIFIA"
+        kelas = "10"
     riwayat = []
-    if siswa_login:
-        riwayat = Planggaran.query.filter_by(nama_siswa=siswa_login.nama_siswa).all()
-    return render_template('siswa.html', siswa=siswa_login, riwayat=riwayat)
-
+    return render_template('siswa.html', siswa=SiswaDummy, riwayat_riwayat)
+    
+   
      
 
 if __name__ == "__main__":
