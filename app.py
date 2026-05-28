@@ -65,7 +65,13 @@ def login_siswa():
 
 @app.route('/siswa')
 def siswa():
-    return "Selamat datang di halaman siswa!"
+    siswa_login = Pelanggaran.query.filter_by(nama_siswa='NAYNA KEISYA AURELIFIA').first()
+    riwayat = []
+    if siswa_login:
+        riwayat = Planggaran.query.filter_by(nama_siswa=siswa_login.nama_siswa).all()
+    return render_template('siswa.html', siswa=siswa_login, riwayat=riwayat)
+
+     
 
 if __name__ == "__main__":
     app.run(debug=True)
