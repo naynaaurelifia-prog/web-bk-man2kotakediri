@@ -91,7 +91,7 @@ def petugas():
         laporan_baru = Riwayat(nama_siswa=nama, kelas=kelas, jenis_pelanggaran=pelanggaran)
         db.session.add(laporan_baru)
         db.session.commit()
-        return redirect('/guru')
+        return "<h1>Laporan Berhasil Terkirim!<h1><a href='/'>Kembali ke Menu Utama</a>"
     return render_template('petugas.html')
 
 # INI KODE HAPUSNYA (PASTIKAN POSISINYA SEPERTI INI)
