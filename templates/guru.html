@@ -96,6 +96,8 @@
                     <thead>
                         <tr>
                             <th style="width: 8px;">No.</th>
+                            <th>Nama Siswa</th>
+                            <th>Kelas</th>
                             <th>Pelanggaran</th>
                             <th style="width: 200px;">Tanggal & Waktu</th>
                         </tr>
@@ -105,6 +107,8 @@
                             {% for p in riwayat %}
                             <tr>
                                 <td>{{ loop.index }}</td>
+                                <td>{{ p.nama_siswa }}</td>
+                                <td>{{ p.kelas }}</td>
                                 <td>{{ p.jenis_pelanggaran }}</td>
                                 <td>{{ p.waktu.strftime('%d/%m/%Y %H:%M') }}</td>
                             </tr>
