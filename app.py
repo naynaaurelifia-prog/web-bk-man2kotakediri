@@ -68,8 +68,10 @@ def siswa():
     data_siswa = {'nama_siswa': nama_user, 'kelas': '10'}
     return render_template('siswa.html', siswa=data_siswa, riwayat=[])
 
-@app.route('/petugas')
+@app.route('/petugas', methods=['GET', 'POST'])
 def petugas():
+    if request.method == 'POST':
+        return redirect('/guru')
     return render_template('petugas.html')
 
 @app.route('/login_guru', methods=['GET', 'POST'])
