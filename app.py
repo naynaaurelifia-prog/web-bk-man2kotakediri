@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 import os
+from datetime import datetime
 
 app = Flask(__name__)
 
@@ -11,17 +12,29 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 
-# Model Database
+# =======================================================
+# MODEL DATABASE
+# =======================================================
+
+# Model 1: Untuk Data Akun Siswa & Login
 class Pelanggaran(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     nama_siswa = db.Column(db.String(100), nullable=False)
     password = db.Column(db.String(100), nullable=True)
     kelas = db.Column(db.String(20), default='10')
 
-# Isi database otomatis
+# Model 2: Untuk Menyimpan Laporan Pelanggaran (FIXED)
+class Riwayat(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    nama_siswa = db.Column(db.String(100), nullable=False)
+    kelas = db.Column(db.String(20), nullable=False)
+    jenis_pelanggaran = db.Column(db.String(100), nullable=False)
+    waktu = db.Column(db.DateTime, default=datetime.now) # Otomatis catat waktu lapor
+
+# Isi database otomatis saat aplikasi pertama kali jalan
 with app.app_context():
     db.create_all()
-    # List nama teman-teman kamu
+    # List nama teman-teman kelas X-10
     teman = {
         'AFRIALDY': 'afrialdy123', 'AHMAD FAIRUZ NADHIR AMRULLOH': 'faiz123',
         'AHMADA DAKA ELJEISA FATIR': 'jesa123', 'ANNISA AZIZAH NUR AQLIS': 'annisa123',
@@ -47,6 +60,10 @@ with app.app_context():
             db.session.add(Pelanggaran(nama_siswa=nama, password=pw))
     db.session.commit()
 
+# =======================================================
+# ROUTES / HALAMAN
+# =======================================================
+
 @app.route('/')
 def home():
     return render_template('index.html')
@@ -66,7 +83,10 @@ def login_siswa():
 def siswa():
     nama_user = request.args.get('nama', 'SISWA')
     data_siswa = {'nama_siswa': nama_user, 'kelas': '10'}
-    return render_template('siswa.html', siswa=data_siswa, riwayat=[])
+    
+    # Menampilkan riwayat milik siswa yang sedang login saja
+    catatan_siswa = Riwayat.query.filter_by(nama_siswa=nama_user).all()
+    return render_template('siswa.html', siswa=data_siswa, riwayat=catatan_siswa)
 
 @app.route('/petugas', methods=['GET', 'POST'])
 def petugas():
@@ -74,9 +94,12 @@ def petugas():
         nama = request.form.get('nama_siswa')
         kelas = request.form.get('kelas')
         pelanggaran = request.form.get('jenis_pelanggaran')
-        laporan_baru = Riwayat(nama=nama, kelas=kelas, pelanggaran-pelanggaran)
+        
+        # MEMBUAT LAPORAN (FIXED TYPO & MODEL)
+        laporan_baru = Riwayat(nama_siswa=nama, kelas=kelas, jenis_pelanggaran=pelanggaran)
         db.session.add(laporan_baru)
-        db.session.commit()
+        db.session.commit() # Menyimpan permanen ke database_v4.db
+        
         return redirect('/guru')
     return render_template('petugas.html')
 
@@ -93,8 +116,12 @@ def login_guru():
 @app.route('/guru')
 def guru():
     nama_bk = request.args.get('nama', 'Guru BK')
-    semua_data = Pelanggaran.query.all()
-    return render_template('guru.html', data_pelanggaran=semua_data, nama_guru=nama_bk)
+    
+    # MENGAMBIL DATA DARI MODEL RIWAYAT (FIXED)
+    semua_laporan = Riwayat.query.all()
+    
+    # Dikirim dengan nama variabel 'riwayat' agar terbaca di guru.html kamu
+    return render_template('guru.html', riwayat=semua_laporan, nama_guru=nama_bk)
 
 if __name__ == "__main__":
     app.run(debug=True)
