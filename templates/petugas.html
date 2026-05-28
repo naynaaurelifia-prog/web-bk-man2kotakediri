@@ -118,17 +118,20 @@
 
         <div class="form-content">
             <form action="/petugas" method="POST">
-                <input type="text" name="nama" value="NAYNA KEISYA AURELIFIA" redaonly>
-                <input type="text" name="kelas" value="X-10" readonly>
-                <button type="submit" class="btn-kirim'>Kirim Laporan</button>
-            </form>
-                <div class="form-group">
+                <div class="input-group">
                     <input type="text" name="nama_siswa" placeholder="Nama Siswa Yang Melanggar" required>
                 </div>
+                <div class="input-group">
+        <select name="jenis_pelanggaran" required>
+            <option value="" disabled selected>Pilih Jenis Pelanggaran</option>
+            <option value="Terlambat">Terlambat</option>
+            <option value="Atribut Tidak Lengkap">Atribut Tidak Lengkap</option>
+            <option value="Bolos">Bolos</option>
+        </select>
+    </div>
 
-                <div class="form-group">
-                    <input type="text" name="kelas" placeholder="Kelas" required>
-                </div>
+    <button type="submit" class="btn-kirim">Kirim Laporan</button>
+</form>
 
                 <div class="form-group">
                     <select name="pelanggaran" required>
