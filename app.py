@@ -73,6 +73,10 @@ def petugas():
     if request.method == 'POST':
         nama = request.form.get('nama_siswa')
         kelas = request.form.get('kelas')
+        pelanggaran = request.form.get('jenis_pelanggaran')
+        laporan_baru = Riwayat(nama=nama, kelas=kelas, pelanggaran-pelanggaran)
+        db.session.add(laporan_baru)
+        db.session.commit()
         return redirect('/guru')
     return render_template('petugas.html')
 
