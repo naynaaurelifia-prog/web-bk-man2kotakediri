@@ -71,6 +71,8 @@ def siswa():
 @app.route('/petugas', methods=['GET', 'POST'])
 def petugas():
     if request.method == 'POST':
+        nama = request.form.get('nama_siswa')
+        kelas = request.form.get('kelas')
         return redirect('/guru')
     return render_template('petugas.html')
 
