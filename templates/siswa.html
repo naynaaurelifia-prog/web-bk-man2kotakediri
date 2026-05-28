@@ -63,13 +63,23 @@
     <div class="main-content">
         <div class="header">
             <div class="header-left">
-                <h2>Selamat datang, Siswa</h2>
-                <p>Berikut adalah informasi pelanggaran hari ini</p>
+                <h2>Selamat Datang, Siswa</h2>
+                <p>Berikut Adalah Informasi Pelanggaran Akhir Akhir Ini</p>
             </div>
             <div class="header-right">
-                <div class="date-info">
-                    <strong>Kamis, 28 Mei 2026</strong><br>
-                    08:30 WIB
+                <div class="date-info"> id="realtime-clock">
+                    </div>
+                <didv class="user-profile">
+                    <div style="text-align: right">
+                        <p style="font-size: 12px; font-weight: bold;">{{ siswa.nama_siswa }}</p>
+                        <p style="font-size: 10px; color: #777;">kelas {{ siswa.kelas }}</p>
+                    </div>
+                    <div class="avatar"><i class="fa fa-user"></i>i></div>
+                </didv>
+            </div>
+                        
+                    
+                    
                 </div>
                 <div class="user-profile">
                     <div style="text-align: right">
@@ -121,6 +131,23 @@
             </div>
         </div>
     </div>
+    <script>
+    function updateClock() {
+        const sekarang = new Date();
+        const opsiTanggal = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        const tanggalStr = sekarang.toLocaleDateString('id-ID', opsiTanggal);
+        
+        const jam = String(sekarang.getHours()).padStart(2, '0');
+        const menit = String(sekarang.getMinutes()).padStart(2, '0');
+        const waktuStr = `${jam}:${menit} WIB`;
+
+        document.getElementById('realtime-clock').innerHTML = `<strong>${tanggalStr}</strong><br>${waktuStr}`;
+    }
+
+    // Jalankan fungsi setiap detik biar jamnya jalan terus
+    setInterval(updateClock, 1000);
+    updateClock(); // Jalankan sekali di awal saat page load
+</script>
 
 </body>
 </html>
