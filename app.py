@@ -75,5 +75,15 @@ def siswa():
     
     return render_template('siswa.html', siswa=data_siswa, riwayat=[])
 
+@app.route('/petugas')
+def petugas():
+    return render_template('petugas.html')
+
+@app.route('/guru')
+def guru():
+    semua_data = Pelanggaran.query.all()
+    return render_template('guru.html', data_pelanggaran=semua_data)
+    
+
 if __name__ == "__main__":
     app.run(debug=True)
