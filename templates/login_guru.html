@@ -6,36 +6,123 @@
     <title>Login Guru BK - MAN 2</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
-        body { background: #f4f7f6; display: flex; justify-content: center; align-items: center; height: 100vh; }
-        .login-card { background: white; padding: 40px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 100%; max-width: 400px; text-align: center; }
-        h2 { color: #0b4b6b; margin-bottom: 10px; font-size: 24px; }
-        p { color: #777; font-size: 14px; margin-bottom: 30px; }
-        .form-group { margin-bottom: 20px; text-align: left; }
-        label { display: block; font-size: 13px; color: #333; margin-bottom: 8px; font-weight: 600; }
-        input { width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; outline: none; font-size: 14px; }
-        input:focus { border-color: #0b4b6b; }
-        button { width: 100%; padding: 12px; background: #0b4b6b; color: white; border: none; border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer; margin-top: 10px; transition: 0.3s; }
-        button:hover { background: #083852; }
-        .back-link { display: inline-block; margin-top: 20px; color: #0b4b6b; text-decoration: none; font-size: 13px; }
+        
+        /* Background biru besar seperti di aplikasi utama kamu */
+        body { 
+            background: #0b4b6b; /* Sesuaikan dengan warna background utama MAN 2 kamu */
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            height: 100vh; 
+        }
+
+        /* Card Utama dengan Lengkungan Gede (Padding Pas) */
+        .login-card { 
+            background: white; 
+            border-radius: 30px; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2); 
+            width: 100%; 
+            max-width: 420px; 
+            overflow: hidden;
+            padding-bottom: 30px;
+            text-align: center;
+        }
+
+        /* Bagian Atas yang Kamu Lingkarin - Diubah jadi Warna BIRU MUDA SKY */
+        .card-header { 
+            background: #38b6ff; /* Warna Biru Muda Sky */
+            padding: 30px 20px;
+            border-bottom-left-radius: 30px;
+            border-bottom-right-radius: 30px;
+            margin-bottom: 30px;
+        }
+        .card-header h2 { 
+            color: white; 
+            font-size: 22px; 
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        /* Form Padding Dalam */
+        .form-container {
+            padding: 0 35px;
+        }
+        .form-group { 
+            margin-bottom: 20px; 
+            text-align: left; 
+        }
+        
+        /* Input text & password melengkung tipis transparan/soft */
+        input { 
+            width: 100%; 
+            padding: 14px 16px; 
+            border: 1px solid #e2e8f0; 
+            background-color: #f8fafc;
+            border-radius: 15px; 
+            outline: none; 
+            font-size: 14px; 
+            color: #333;
+            transition: 0.3s;
+        }
+        input:focus { 
+            border-color: #38b6ff; 
+            background-color: #fff;
+        }
+
+        /* Tombol Masuk - Ikut Warna Sky Blue */
+        button { 
+            width: 100%; 
+            padding: 14px; 
+            background: #38b6ff; /* Warna Sky Blue */
+            color: white; 
+            border: none; 
+            border-radius: 15px; 
+            font-size: 15px; 
+            font-weight: 700; 
+            cursor: pointer; 
+            margin-top: 15px; 
+            box-shadow: 0 4px 12px rgba(56, 182, 255, 0.3);
+            transition: 0.3s; 
+        }
+        button:hover { 
+            background: #1da1f2; 
+            transform: translateY(-1px);
+        }
+
+        .back-link { 
+            display: inline-block; 
+            margin-top: 25px; 
+            color: #888; 
+            text-decoration: none; 
+            font-size: 13px; 
+            transition: 0.3s;
+        }
+        .back-link:hover {
+            color: #38b6ff;
+        }
     </style>
 </head>
 <body>
 
     <div class="login-card">
-        <h2>LOGIN GURU BK</h2>
-        <p>MAN 2 KOTA KEDIRI</p>
-        <form action="/login_guru" method="POST">
-            <div class="form-group">
-                <label>Nama Guru</label>
-                <input type="text" name="nama_guru" placeholder="Masukkan Nama Lengkap beserta Gelar" required>
-            </div>
-            <div class="form-group">
-                <label>Password Admin</label>
-                <input type="password" name="password" placeholder="Masukkan Password" required>
-            </div>
-            <button type="submit">MASUK</button>
-        </form>
-        <a href="/" class="back-link">← Kembali ke Beranda</a>
+        <!-- Bagian Atas: Berwarna Biru Muda Sky & Melengkung ke dalam -->
+        <div class="card-header">
+            <h2>Masuk sebagai guru</h2>
+        </div>
+
+        <!-- Bagian Form Isian -->
+        <div class="form-container">
+            <form action="/login_guru" method="POST">
+                <div class="form-group">
+                    <input type="text" name="nama_guru" placeholder="Nama Guru / Akun Guru" required>
+                </div>
+                <div class="form-group">
+                    <input type="password" name="password" placeholder="Password Admin" required>
+                </div>
+                <button type="submit">Masuk</button>
+            </form>
+            <a href="/" class="back-link">← Kembali ke Menu Utama</a>
+        </div>
     </div>
 
 </body>
