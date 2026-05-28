@@ -4,7 +4,7 @@ import os
 
 app = Flask(__name__)
 
-# Konfigurasi Database - Gunakan V4 biar bener-bener fresh dan bersih
+# Konfigurasi Database
 db_path = os.path.join('/tmp', 'database_v4.db')
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + db_path
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -18,9 +18,10 @@ class Pelanggaran(db.Model):
     password = db.Column(db.String(100), nullable=True)
     kelas = db.Column(db.String(20), default='10')
 
-# Buat Database dan Isi Nama Teman Otomatis
+# Isi database otomatis
 with app.app_context():
     db.create_all()
+    # List nama teman-teman kamu
     teman = {
         'AFRIALDY': 'afrialdy123', 'AHMAD FAIRUZ NADHIR AMRULLOH': 'faiz123',
         'AHMADA DAKA ELJEISA FATIR': 'jesa123', 'ANNISA AZIZAH NUR AQLIS': 'annisa123',
@@ -57,44 +58,35 @@ def login_siswa():
         pw_input = request.form.get('password')
         user = Pelanggaran.query.filter_by(nama_siswa=nama_input).first()
         if user and user.password == pw_input:
-            # Mengalihkan halaman sambil membawa data nama yang login
             return redirect(url_for('siswa', nama=nama_input))
         return "Login Gagal! Cek Nama (KAPITAL) & Password."
     return render_template('login_siswa.html')
 
 @app.route('/siswa')
 def siswa():
-    # Mengambil nama dari URL, kalau tidak ada defaultnya NAYNA
-    nama_user = request.args.get('nama', 'NAYNA KEISYA AURELIFIA')
-    
-    # Bikin data dictionary sederhana buat dikirim ke HTML
-    data_siswa = {
-        'nama_siswa': nama_user,
-        'kelas': '10'
-    }
-    
+    nama_user = request.args.get('nama', 'SISWA')
+    data_siswa = {'nama_siswa': nama_user, 'kelas': '10'}
     return render_template('siswa.html', siswa=data_siswa, riwayat=[])
 
 @app.route('/petugas')
 def petugas():
     return render_template('petugas.html')
 
-@app.route('/login_guru')
+@app.route('/login_guru', methods=['GET', 'POST'])
 def login_guru():
-    if request.method == 'POST',:
-        nama_input = request.form.get('nama-guru')
+    if request.method == 'POST':
+        nama_input = request.form.get('nama_guru')
         pw_input = request.form.get('password')
         if pw_input == 'IECM2KK':
             return redirect(url_for('guru', nama=nama_input))
-        return "Login Guru Gagal! Password admin salah."
+        return "Login Guru Gagal! Password Admin Salah."
     return render_template('login_guru.html')
 
-@app.route(/guru)
+@app.route('/guru')
 def guru():
     nama_bk = request.args.get('nama', 'Guru BK')
     semua_data = Pelanggaran.query.all()
     return render_template('guru.html', data_pelanggaran=semua_data, nama_guru=nama_bk)
-    
 
 if __name__ == "__main__":
     app.run(debug=True)
