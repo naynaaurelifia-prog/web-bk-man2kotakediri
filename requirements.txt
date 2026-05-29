@@ -1,2 +1,5 @@
 Flask
-Flask-SQLAlchemy
+supabase
+realtime
+postgrest
+gotrue
