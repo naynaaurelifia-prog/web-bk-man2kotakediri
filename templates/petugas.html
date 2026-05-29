@@ -6,7 +6,7 @@
     <title>Lapor Pelanggaran - BK MAN 2 KOTA KEDIRI</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        /* CSS TETAP PAKAI PUNYAMU YANG KEREN */
+        * { box-sizing: border-box; }
         body {
             background: linear-gradient(135deg, rgba(45, 62, 150, 0.9) 0%, rgba(26, 37, 90, 0.95) 100%), 
                         url("{{ url_for('static', filename='1000107070.jpg') }}");
@@ -19,11 +19,12 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
+            padding: 20px; /* Tambahan biar card gak nempel tembok pas di HP */
         }
 
         .card {
             background: white;
-            width: 90%;
+            width: 100%; /* Biar fleksibel */
             max-width: 400px;
             border-radius: 30px;
             overflow: hidden;
@@ -42,7 +43,7 @@
 
         .header h2 {
             margin: 0;
-            font-size: 1.5em;
+            font-size: 1.3em; /* Sedikit dikecilkan biar gak pecah di HP */
             letter-spacing: 1px;
         }
 
@@ -61,7 +62,7 @@
             border: 1.5px solid #ccc;
             border-radius: 30px; 
             box-sizing: border-box;
-            font-size: 0.95em;
+            font-size: 16px; /* Penting: 16px biar iPhone gak otomatis zoom pas ngetik */
             outline: none;
             transition: 0.3s;
         }
@@ -98,16 +99,23 @@
             font-size: 0.85em;
         }
 
-        /* Style tambahan buat pesan sukses agar tidak nabrak */
         .alert-success {
             background-color: #d4edda; 
             color: #155724; 
             padding: 12px; 
             border-radius: 20px; 
-            margin: 20px 25px 0 25px; /* Margin biar pas di tengah card */
+            margin: 20px 25px 0 25px; 
             text-align: center; 
             font-size: 0.85em; 
             border: 1px solid #c3e6cb;
+        }
+
+        /* Responsif untuk HP Kecil */
+        @media (max-width: 480px) {
+            .header { padding: 30px 15px; }
+            .header h2 { font-size: 1.1em; }
+            .form-content { padding: 20px 15px; }
+            input, select { padding: 12px 18px; }
         }
 
         @keyframes fadeIn {
