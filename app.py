@@ -51,7 +51,7 @@ def tambah_pelanggaran():
         }
         # Menyimpan data langsung ke tabel Supabase online
         supabase.table("Pelanggaran").insert(data).execute()
-        return redirect(url_for('home'))
+        return "<script>alert('Laporan Telah Terkirim ke Guru BK'); window.location.href='/';</script>"
         
     return redirect(url_for('home'))
 
@@ -69,13 +69,12 @@ def login_siswa():
 @app.route('/siswa')
 def siswa():
     nama_user = request.args.get('nama', 'SISWA')
-    data_siswa = {'nama_siswa': nama_user, 'kelas': '10'}
     
     # Mengambil riwayat pelanggaran khusus siswa dari Supabase
     respon = supabase.table("Pelanggaran").select("*").eq("nama_siswa", nama_user).execute()
-    riwayat_pelanggaran = respon.data if respon.data else []
+    riwayat = respon.data
     
-    return render_template('siswa.html', siswa=data_siswa, riwayat=riwayat_pelanggaran)
+    return render_template('siswa.html', siswa={'nama_siswa': nama_user}, riwayat=riwayat)
 
 @app.route('/petugas')
 def petugas():
@@ -94,12 +93,14 @@ def login_guru():
 @app.route('/guru')
 def guru():
     nama_bk = request.args.get('nama', 'Guru BK')
-    
-    # Mengambil semua data pelanggaran dari Supabase untuk Guru BK
     respon = supabase.table("Pelanggaran").select("*").execute()
-    semua_data = respon.data if respon.data else []
+    semua_data = respon.data
     
     return render_template('guru.html', data_pelanggaran=semua_data, nama_guru=nama_bk)
+@app.route('/hapus_pelanggaran/<int:id_laporan')
+def hapus_pelanggaran(id_laporan):
+    supabase.table("Pelanggaran").delete().eq("id", id_laporan).execute()
+    return "<script>alert('Data Berhasil Dihapus'); window.location.href='/guru';</script>"
 
 if __name__ == "__main__":
     app.run(debug=True)
