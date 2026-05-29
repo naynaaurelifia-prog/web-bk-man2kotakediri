@@ -1,15 +1,14 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, session
 from flask_sqlalchemy import SQLAlchemy
+from supabase import create_client, Client
 import os
 
 app = Flask(__name__)
+app.secret_key = 'berylaurel3108'
+SUPABASE_URL = "https://owxkabzlenxmpoyuyttm.supabase.co"
+SUPABASE_KEY = "sb_publishable_7f4QJTIGVa-g1e8gOt5v_w_VsjWdUj2"
+supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
-# Konfigurasi Database
-db_path = os.path.join('/tmp', 'database_v4.db')
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + db_path
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
-db = SQLAlchemy(app)
 
 # Model Database
 class Pelanggaran(db.Model):
