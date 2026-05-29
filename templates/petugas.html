@@ -3,173 +3,60 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lapor Pelanggaran - BK MAN 2 KOTA KEDIRI</title>
+    <title>Input Pelanggaran - BK MAN 2</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        * { box-sizing: border-box; }
-        body {
-            background: linear-gradient(135deg, rgba(45, 62, 150, 0.9) 0%, rgba(26, 37, 90, 0.95) 100%), 
-                        url("{{ url_for('static', filename='1000107070.jpg') }}");
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-            font-family: 'Segoe UI', sans-serif;
-            margin: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: 20px; /* Tambahan biar card gak nempel tembok pas di HP */
-        }
-
-        .card {
-            background: white;
-            width: 100%; /* Biar fleksibel */
-            max-width: 400px;
-            border-radius: 30px;
-            overflow: hidden;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
-            animation: fadeIn 0.5s ease;
-        }
-
-        .header {
-            background-color: #2d3e96;
-            color: white;
-            padding: 40px 20px;
-            border-bottom-left-radius: 50px;
-            border-bottom-right-radius: 50px;
-            text-align: center;
-        }
-
-        .header h2 {
-            margin: 0;
-            font-size: 1.3em; /* Sedikit dikecilkan biar gak pecah di HP */
-            letter-spacing: 1px;
-        }
-
-        .form-content {
-            padding: 30px 25px;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-            text-align: left;
-        }
-        
-        input, select {
-            width: 100%;
-            padding: 15px 20px;
-            border: 1.5px solid #ccc;
-            border-radius: 30px; 
-            box-sizing: border-box;
-            font-size: 16px; /* Penting: 16px biar iPhone gak otomatis zoom pas ngetik */
-            outline: none;
-            transition: 0.3s;
-        }
-
-        input:focus, select:focus {
-            border-color: #2d3e96;
-            box-shadow: 0 0 8px rgba(45, 62, 150, 0.2);
-        }
-
-        .btn-submit {
-            background-color: #2d3e96;
-            color: white;
-            border: none;
-            width: 100%;
-            padding: 16px;
-            border-radius: 30px;
-            font-weight: bold;
-            font-size: 1em;
-            cursor: pointer;
-            margin-top: 10px;
-            transition: 0.3s;
-        }
-
-        .btn-submit:hover {
-            background-color: #1a255a;
-            transform: translateY(-2px);
-        }
-
-        .btn-back {
-            display: inline-block;
-            margin-top: 15px;
-            text-decoration: none;
-            color: #666;
-            font-size: 0.85em;
-        }
-
-        .alert-success {
-            background-color: #d4edda; 
-            color: #155724; 
-            padding: 12px; 
-            border-radius: 20px; 
-            margin: 20px 25px 0 25px; 
-            text-align: center; 
-            font-size: 0.85em; 
-            border: 1px solid #c3e6cb;
-        }
-
-        /* Responsif untuk HP Kecil */
-        @media (max-width: 480px) {
-            .header { padding: 30px 15px; }
-            .header h2 { font-size: 1.1em; }
-            .form-content { padding: 20px 15px; }
-            input, select { padding: 12px 18px; }
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+        body { display: flex; justify-content: center; align-items: center; min-height: 100vh; background-color: #f4f7f6; padding: 20px; }
+        .container { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); width: 100%; max-width: 500px; }
+        h1 { font-size: 22px; color: #0b4b6b; margin-bottom: 10px; font-weight: 700; text-align: center; }
+        p { font-size: 13px; color: #666; margin-bottom: 25px; text-align: center; }
+        .form-group { margin-bottom: 20px; }
+        label { display: block; font-size: 13px; font-weight: 600; color: #333; margin-bottom: 8px; }
+        input[type="text"], textarea, input[type="datetime-local"] { width: 100%; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 13px; outline: none; transition: 0.3s; }
+        input:focus, textarea:focus { border-color: #0b4b6b; }
+        textarea { height: 100px; resize: none; }
+        .button-group { display: flex; gap: 10px; margin-top: 25px; }
+        button { flex: 1; background-color: #0b4b6b; color: white; border: none; padding: 12px; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer; transition: 0.3s; }
+        button:hover { background-color: #083852; }
+        .btn-kembali { flex: 1; text-align: center; background-color: #e2e8f0; color: #475569; padding: 12px; border-radius: 6px; text-decoration: none; font-size: 13px; font-weight: 600; transition: 0.3s; }
+        .btn-kembali:hover { background-color: #cbd5e1; }
     </style>
 </head>
 <body>
-    
-    <div class="card">
-        <div class="header">
-            <h2>Masuk sebagai petugas</h2>
-        </div>
 
-        {% with messages = get_flashed_messages() %}
-            {% if messages %}
-                {% for message in messages %}
-                    <div class="alert-success">
-                        <i class="fa fa-check-circle"></i> {{ message }}
-                    </div>
-                {% endfor %}
-            {% endif %}
-        {% endwith %}
-    
-        <div class="form-content">
-            <form action="/petugas" method="POST">
-                
-                <div class="form-group">
-                    <input type="text" name="nama_siswa" placeholder="Nama Siswa Yang Melanggar" required>
-                </div>
+    <div class="container">
+        <h1>Input Data Pelanggaran</h1>
+        <p>Silakan masukkan data pelanggaran siswa secara lengkap.</p>
 
-                <div class="form-group">
-                    <input type="text" name="kelas" placeholder="Kelas Siswa (Contoh: X-10)" required>
-                </div>
-
-                <div class="form-group">
-                    <select name="jenis_pelanggaran" required>
-                        <option value="" disabled selected>Pilih Jenis Pelanggaran</option>
-                        <option value="Terlambat">Terlambat</option>
-                        <option value="Atribut Tidak Lengkap">Atribut Tidak Lengkap</option>
-                        <option value="Bolos">Bolos</option>
-                        <option value="Rambut Tidak Rapi">Rambut Tidak Rapi</option>
-                        <option value="Lainnya">Lainnya</option>
-                    </select>
-                </div>
-
-                <button type="submit" class="btn-submit">Kirim Laporan</button>
-            </form>
+        <!-- KUNCI PENYELAMAT NYA ADA DI BARIS INI, NAY! -->
+        <form action="/tambah_pelanggaran" method="POST">
             
-            <center>
-                <a href="/" class="btn-back">← Kembali ke Menu Utama</a>
-            </center>
-        </div>
+            <div class="form-group">
+                <label>Nama Siswa (Gunakan Huruf Kapital):</label>
+                <input type="text" name="nama_siswa" placeholder="Contoh: NAYNA KEISYA AURELIFIA" required>
+            </div>
+
+            <div class="form-group">
+                <label>Kelas:</label>
+                <input type="text" name="kelas" placeholder="Contoh: 10" required>
+            </div>
+
+            <div class="form-group">
+                <label>Jenis Pelanggaran:</label>
+                <textarea name="pelanggaran" placeholder="Tuliskan detail pelanggaran siswa..." required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Tanggal & Waktu:</label>
+                <input type="datetime-local" name="tanggal_waktu" required>
+            </div>
+
+            <div class="button-group">
+                <button type="submit"><i class="fa fa-paper-plane"></i> Kirim Laporan</button>
+                <a href="/" class="btn-kembali">Kembali</a>
+            </div>
+        </form>
     </div>
 
 </body>
