@@ -97,7 +97,9 @@ def guru():
     semua_data = respon.data
     
     return render_template('guru.html', data_pelanggaran=semua_data, nama_guru=nama_bk)
-@app.route('/hapus_pelanggaran/<int:id_laporan')
+
+# === RUTE HAPUS (Sudah Diperbaiki Kurung Siku Tutupnya) ===
+@app.route('/hapus_pelanggaran/<int:id_laporan>')
 def hapus_pelanggaran(id_laporan):
     supabase.table("Pelanggaran").delete().eq("id", id_laporan).execute()
     return "<script>alert('Data Berhasil Dihapus'); window.location.href='/guru';</script>"
