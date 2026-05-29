@@ -1,122 +1,168 @@
-from flask import Flask, render_template, request, redirect, url_for, flash
-from flask_sqlalchemy import SQLAlchemy
-import os
-from datetime import datetime
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lapor Pelanggaran - BK MAN 2 KOTA KEDIRI</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* CSS TETAP PAKAI PUNYAMU YANG KEREN */
+        body {
+            background: linear-gradient(135deg, rgba(45, 62, 150, 0.9) 0%, rgba(26, 37, 90, 0.95) 100%), 
+                        url("{{ url_for('static', filename='1000107070.jpg') }}");
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
 
-app = Flask(__name__)
+        .card {
+            background: white;
+            width: 90%;
+            max-width: 400px;
+            border-radius: 30px;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            animation: fadeIn 0.5s ease;
+        }
 
-# Konfigurasi Database
-app.config['SQLALCHEMY_DATABABASE_URI'] = 'sqlite:///database_aman.db'
-app.config['SECRET_KEY'] = 'berylaurel'
+        .header {
+            background-color: #2d3e96;
+            color: white;
+            padding: 40px 20px;
+            border-bottom-left-radius: 50px;
+            border-bottom-right-radius: 50px;
+            text-align: center;
+        }
 
-db = SQLAlchemy(app)
+        .header h2 {
+            margin: 0;
+            font-size: 1.5em;
+            letter-spacing: 1px;
+        }
 
-# =======================================================
-# MODEL DATABASE
-# =======================================================
+        .form-content {
+            padding: 30px 25px;
+        }
 
-class Pelanggaran(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    nama_siswa = db.Column(db.String(100), nullable=False)
-    password = db.Column(db.String(100), nullable=True)
-    kelas = db.Column(db.String(20), default='10')
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 15px 20px;
+            border: 1.5px solid #ccc;
+            border-radius: 30px; 
+            box-sizing: border-box;
+            font-size: 0.95em;
+            outline: none;
+            transition: 0.3s;
+        }
 
-class Riwayat(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    nama_siswa = db.Column(db.String(100), nullable=False)
-    kelas = db.Column(db.String(20), nullable=False)
-    jenis_pelanggaran = db.Column(db.String(100), nullable=False)
-    waktu = db.Column(db.DateTime, default=datetime.now)
+        input:focus, select:focus {
+            border-color: #2d3e96;
+            box-shadow: 0 0 8px rgba(45, 62, 150, 0.2);
+        }
 
-with app.app_context():
-    db.create_all()
-    teman = {
-        'AFRIALDY': 'afrialdy123', 'AHMAD FAIRUZ NADHIR AMRULLOH': 'faiz123',
-        'AHMADA DAKA ELJEISA FATIR': 'jesa123', 'ANNISA AZIZAH NUR AQLIS': 'annisa123',
-        'ASHFA ALYA': 'ashfa123', 'CINTA TARISA': 'cinta123',
-        'DAMAR SATRIO WIBOWO': 'damar123', 'DEVINA AURALIA IMANDA PUTRI': 'devina123',
-        'CAKRA PAMBAYUN': 'cakra123', 'GAYATRI NASTITI DWI HAPSARI': 'aya123',
-        'HABLY WAFIROTAL IZZAH': 'hably123', 'IQLIMA AINUN HANIFAH': 'hani123',
-        'JASMINE PRAMESWARI WAHYUDI': 'jasmine123', 'KALILA SALSABILA': 'kalila123',
-        'MALVA ANASIRUL RAHMAH': 'malva123', 'MOH.ANANDA RIZKY FAUZI': 'rizky123',
-        'MUHAMMAD DAVIN REZQYANO': 'davin123', 'MUHAMMAD GALVIN SOBIRIN': 'galvin123',
-        'MUHAMMAD HAFIDZUL BAYDHOWI': 'owi123', 'MUHAMMAD HAFIDZUS SALAM': 'salam123',
-        'NADHIFA AQILAH': 'nadhifa123', 'NAYNA KEISYA AURELIFIA': 'nayna123',
-        'NUZULIKHAN LANGIT ALFASANAH': 'zulkha123', 'OBBIE ABRAR RASHEESA': 'obbie123',
-        'PRINCESS ANNABELLE RAHMA HUWAIDA': 'abel123', 'PUTRI AYU AURA RAMADHANI': 'ayu123',
-        'RADITHYA ALTHAF HUDA RAMADHAN': 'althaf123', 'RAFA WAHYUZAKY ANANDIKA': 'rafa123',
-        'RAJA AULIA RIZQY PRIHARTONO': 'raja123', 'SEPTHIA PUTRI WAGITA': 'tia123',
-        'STEFANIE QUEEN': 'fani123', 'SYIFA AMELIA ARTANTI': 'syifa123',
-        'TANAYA RISWANA MAHARANI': 'naya123', 'VERRINSYANA VHIMALA': 'vivi123',
-        'ZIANKA QOLBI UDZMA ISLAMEY': 'zizi123'
-    }
-    for nama, pw in teman.items():
-        if not Pelanggaran.query.filter_by(nama_siswa=nama).first():
-            db.session.add(Pelanggaran(nama_siswa=nama, password=pw))
-    db.session.commit()
+        .btn-submit {
+            background-color: #2d3e96;
+            color: white;
+            border: none;
+            width: 100%;
+            padding: 16px;
+            border-radius: 30px;
+            font-weight: bold;
+            font-size: 1em;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: 0.3s;
+        }
 
-# =======================================================
-# ROUTES
-# =======================================================
+        .btn-submit:hover {
+            background-color: #1a255a;
+            transform: translateY(-2px);
+        }
 
-@app.route('/')
-def home():
-    return render_template('index.html')
+        .btn-back {
+            display: inline-block;
+            margin-top: 15px;
+            text-decoration: none;
+            color: #666;
+            font-size: 0.85em;
+        }
 
-@app.route('/login_siswa', methods=['GET', 'POST'])
-def login_siswa():
-    if request.method == 'POST':
-        nama_input = request.form.get('nama')
-        pw_input = request.form.get('password')
-        user = Pelanggaran.query.filter_by(nama_siswa=nama_input).first()
-        if user and user.password == pw_input:
-            return redirect(url_for('siswa', nama=nama_input))
-        return "Login Gagal! Cek Nama (KAPITAL) & Password."
-    return render_template('login_siswa.html')
+        /* Style tambahan buat pesan sukses agar tidak nabrak */
+        .alert-success {
+            background-color: #d4edda; 
+            color: #155724; 
+            padding: 12px; 
+            border-radius: 20px; 
+            margin: 20px 25px 0 25px; /* Margin biar pas di tengah card */
+            text-align: center; 
+            font-size: 0.85em; 
+            border: 1px solid #c3e6cb;
+        }
 
-@app.route('/siswa')
-def siswa():
-    nama_user = request.args.get('nama', 'SISWA')
-    data_siswa = {'nama_siswa': nama_user, 'kelas': '10'}
-    catatan_siswa = Riwayat.query.filter_by(nama_siswa=nama_user).all()
-    return render_template('siswa.html', siswa=data_siswa, riwayat=catatan_siswa)
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="card">
+        <div class="header">
+            <h2>Masuk sebagai petugas</h2>
+        </div>
 
-@app.route('/petugas', methods=['GET', 'POST'])
-def petugas():
-    if request.method == 'POST':
-        nama = request.form.get('nama_siswa')
-        kelas = request.form.get('kelas')
-        pelanggaran = request.form.get('jenis_pelanggaran')
-        laporan_baru = Riwayat(nama_siswa=nama, kelas=kelas, jenis_pelanggaran=pelanggaran)
-        db.session.add(laporan_baru)
-        db.session.commit()
-        flash("Laporan Berhasil Terkirim ke Guru BK!")
-    return render_template('petugas.html')
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert-success">
+                        <i class="fa fa-check-circle"></i> {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    
+        <div class="form-content">
+            <form action="/petugas" method="POST">
+                
+                <div class="form-group">
+                    <input type="text" name="nama_siswa" placeholder="Nama Siswa Yang Melanggar" required>
+                </div>
 
-# INI KODE HAPUSNYA (PASTIKAN POSISINYA SEPERTI INI)
-@app.route('/hapus/<int:id>')
-def hapus_laporan(id):
-    laporan = Riwayat.query.get(id)
-    if laporan:
-        db.session.delete(laporan)
-        db.session.commit()
-    return redirect('/guru')
+                <div class="form-group">
+                    <input type="text" name="kelas" placeholder="Kelas Siswa (Contoh: X-10)" required>
+                </div>
 
-@app.route('/login_guru', methods=['GET', 'POST'])
-def login_guru():
-    if request.method == 'POST':
-        nama_input = request.form.get('nama_guru')
-        pw_input = request.form.get('password')
-        if pw_input == 'IECM2KK':
-            return redirect(url_for('guru', nama=nama_input))
-        return "Login Guru Gagal! Password Admin Salah."
-    return render_template('login_guru.html')
+                <div class="form-group">
+                    <select name="jenis_pelanggaran" required>
+                        <option value="" disabled selected>Pilih Jenis Pelanggaran</option>
+                        <option value="Terlambat">Terlambat</option>
+                        <option value="Atribut Tidak Lengkap">Atribut Tidak Lengkap</option>
+                        <option value="Bolos">Bolos</option>
+                        <option value="Rambut Tidak Rapi">Rambut Tidak Rapi</option>
+                        <option value="Lainnya">Lainnya</option>
+                    </select>
+                </div>
 
-@app.route('/guru')
-def guru():
-    nama_bk = request.args.get('nama', 'Guru BK')
-    semua_laporan = Riwayat.query.all()
-    return render_template('guru.html', riwayat=semua_laporan, nama_guru=nama_bk)
+                <button type="submit" class="btn-submit">Kirim Laporan</button>
+            </form>
+            
+            <center>
+                <a href="/" class="btn-back">← Kembali ke Menu Utama</a>
+            </center>
+        </div>
+    </div>
 
-if __name__ == "__main__":
-    app.run(debug=True)
+</body>
+</html>
