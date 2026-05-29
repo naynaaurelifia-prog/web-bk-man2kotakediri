@@ -1,5 +1,4 @@
 from flask import Flask, render_template, request, redirect, url_for, session
-from flask_sqlalchemy import SQLAlchemy
 from supabase import create_client, Client
 import os
 
@@ -9,52 +8,39 @@ SUPABASE_URL = "https://owxkabzlenxmpoyuyttm.supabase.co"
 SUPABASE_KEY = "sb_publishable_7f4QJTIGVa-g1e8gOt5v_w_VsjWdUj2"
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
-
-# Model Database
-class Pelanggaran(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    nama_siswa = db.Column(db.String(100), nullable=False)
-    password = db.Column(db.String(100), nullable=True)
-    kelas = db.Column(db.String(20), default='10')
-
-# Isi database otomatis
-with app.app_context():
-    db.create_all()
-    # List nama teman-teman kamu
-    teman = {
-        'AFRIALDY': 'afrialdy123', 'AHMAD FAIRUZ NADHIR AMRULLOH': 'faiz123',
-        'AHMADA DAKA ELJEISA FATIR': 'jesa123', 'ANNISA AZIZAH NUR AQLIS': 'annisa123',
-        'ASHFA ALYA': 'ashfa123', 'CINTA TARISA': 'cinta123',
-        'DAMAR SATRIO WIBOWO': 'damar123', 'DEVINA AURALIA IMANDA PUTRI': 'devina123',
-        'CAKRA PAMBAYUN': 'cakra123', 'GAYATRI NASTITI DWI HAPSARI': 'aya123',
-        'HABLY WAFIROTAL IZZAH': 'hably123', 'IQLIMA AINUN HANIFAH': 'hani123',
-        'JASMINE PRAMESWARI WAHYUDI': 'jasmine123', 'KALILA SALSABILA': 'kalila123',
-        'MALVA ANASIRUL RAHMAH': 'malva123', 'MOH.ANANDA RIZKY FAUZI': 'rizky123',
-        'MUHAMMAD DAVIN REZQYANO': 'davin123', 'MUHAMMAD GALVIN SOBIRIN': 'galvin123',
-        'MUHAMMAD HAFIDZUL BAYDHOWI': 'owi123', 'MUHAMMAD HAFIDZUS SALAM': 'salam123',
-        'NADHIFA AQILAH': 'nadhifa123', 'NAYNA KEISYA AURELIFIA': 'nayna123',
-        'NUZULIKHAN LANGIT ALFASANAH': 'zulkha123', 'OBBIE ABRAR RASHEESA': 'obbie123',
-        'PRINCESS ANNABELLE RAHMA HUWAIDA': 'abel123', 'PUTRI AYU AURA RAMADHANI': 'ayu123',
-        'RADITHYA ALTHAF HUDA RAMADHAN': 'althaf123', 'RAFA WAHYUZAKY ANANDIKA': 'rafa123',
-        'RAJA AULIA RIZQY PRIHARTONO': 'raja123', 'SEPTHIA PUTRI WAGITA': 'tia123',
-        'STEFANIE QUEEN': 'fani123', 'SYIFA AMELIA ARTANTI': 'syifa123',
-        'TANAYA RISWANA MAHARANI': 'naya123', 'VERRINSYANA VHIMALA': 'vivi123',
-        'ZIANKA QOLBI UDZMA ISLAMEY': 'zizi123'
-    }
-    for nama, pw in teman.items():
-        if not Pelanggaran.query.filter_by(nama_siswa=nama).first():
-            db.session.add(Pelanggaran(nama_siswa=nama, password=pw))
-    db.session.commit()
+# List nama teman-teman kamu (Sesuai kode asli kamu tanpa diubah)
+teman = {
+    'AFRIALDY': 'afrialdy123', 'AHMAD FAIRUZ NADHIR AMRULLOH': 'faiz123',
+    'AHMADA DAKA ELJEISA FATIR': 'jesa123', 'ANNISA AZIZAH NUR AQLIS': 'annisa123',
+    'ASHFA ALYA': 'ashfa123', 'CINTA TARISA': 'cinta123',
+    'DAMAR SATRIO WIBOWO': 'damar123', 'DEVINA AURALIA IMANDA PUTRI': 'devina123',
+    'CAKRA PAMBAYUN': 'cakra123', 'GAYATRI NASTITI DWI HAPSARI': 'aya123',
+    'HABLY WAFIROTAL IZZAH': 'hably123', 'IQLIMA AINUN HANIFAH': 'hani123',
+    'JASMINE PRAMESWARI WAHYUDI': 'jasmine123', 'KALILA SALSABILA': 'kalila123',
+    'MALVA ANASIRUL RAHMAH': 'malva123', 'MOH.ANANDA RIZKY FAUZI': 'rizky123',
+    'MUHAMMAD DAVIN REZQYANO': 'davin123', 'MUHAMMAD GALVIN SOBIRIN': 'galvin123',
+    'MUHAMMAD HAFIDZUL BAYDHOWI': 'owi123', 'MUHAMMAD HAFIDZUS SALAM': 'salam123',
+    'NADHIFA AQILAH': 'nadhifa123', 'NAYNA KEISYA AURELIFIA': 'nayna123',
+    'NUZULIKHAN LANGIT ALFASANAH': 'zulkha123', 'OBBIE ABRAR RASHEESA': 'obbie123',
+    'PRINCESS ANNABELLE RAHMA HUWAIDA': 'abel123', 'PUTRI AYU AURA RAMADHANI': 'ayu123',
+    'RADITHYA ALTHAF HUDA RAMADHAN': 'althaf123', 'RAFA WAHYUZAKY ANANDIKA': 'rafa123',
+    'RAJA AULIA RIZQY PRIHARTONO': 'raja123', 'SEPTHIA PUTRI WAGITA': 'tia123',
+    'STEFANIE QUEEN': 'fani123', 'SYIFA AMELIA ARTANTI': 'syifa123',
+    'TANAYA RISWANA MAHARANI': 'naya123', 'VERRINSYANA VHIMALA': 'vivi123',
+    'ZIANKA QOLBI UDZMA ISLAMEY': 'zizi123'
+}
 
 @app.route('/')
 def home():
     return render_template('index.html')
+
 @app.route('/tambah_pelanggaran', methods=['POST'])
 def tambah_pelnggaran():
     nama_dari_form = request.form.get('nama_siswa')
     kelas_dari_form = request.form.get('kelas')
     pelanggaran_dari_form = request.form.get('pelanggaran')
-    tanggal_dari_form = request.form.get(tanggal_wakty')
+    tanggal_dari_form = request.form.get('tanggal_waktu') # Diperbaiki typo tanda petiknya
+    
     data = {
         "nama_siswa": nama_dari_form,
         "kelas": kelas_dari_form,
@@ -63,15 +49,15 @@ def tambah_pelnggaran():
     }
     supabase.table("Pelanggaran").insert(data).execute()
     return redirect(url_for('home')) 
-                                         
 
 @app.route('/login_siswa', methods=['GET', 'POST'])
 def login_siswa():
     if request.method == 'POST':
         nama_input = request.form.get('nama')
         pw_input = request.form.get('password')
-        user = Pelanggaran.query.filter_by(nama_siswa=nama_input).first()
-        if user and user.password == pw_input:
+        
+        # Mengecek langsung ke list teman di atas (Menggantikan baris Pelanggaran.query yang error)
+        if nama_input in teman and teman[nama_input] == pw_input:
             return redirect(url_for('siswa', nama=nama_input))
         return "Login Gagal! Cek Nama (KAPITAL) & Password."
     return render_template('login_siswa.html')
@@ -80,7 +66,12 @@ def login_siswa():
 def siswa():
     nama_user = request.args.get('nama', 'SISWA')
     data_siswa = {'nama_siswa': nama_user, 'kelas': '10'}
-    return render_template('siswa.html', siswa=data_siswa, riwayat=[])
+    
+    # Nyelipin Supabase: mengambil riwayat pelanggaran khusus siswa yang sedang login
+    respon = supabase.table("Pelanggaran").select("*").eq("nama_siswa", nama_user).execute()
+    riwayat_pelanggaran = respon.data if respon.data else []
+    
+    return render_template('siswa.html', siswa=data_siswa, riwayat=riwayat_pelanggaran)
 
 @app.route('/petugas')
 def petugas():
@@ -99,7 +90,11 @@ def login_guru():
 @app.route('/guru')
 def guru():
     nama_bk = request.args.get('nama', 'Guru BK')
-    semua_data = Pelanggaran.query.all()
+    
+    # Nyelipin Supabase: mengambil semua data pelanggaran dari cloud untuk Guru BK
+    respon = supabase.table("Pelanggaran").select("*").execute()
+    semua_data = respon.data if respon.data else []
+    
     return render_template('guru.html', data_pelanggaran=semua_data, nama_guru=nama_bk)
 
 if __name__ == "__main__":
