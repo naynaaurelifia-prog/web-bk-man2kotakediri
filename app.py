@@ -23,8 +23,9 @@ class Riwayat(db.Model):
     waktu = db.Column(db.DateTime, default=datetime.now)
 
 # Membuat database secara otomatis di folder /tmp/ (yang diizinkan hosting)
-with app.app_context():
-    db.create_all()
+def buat_db():
+    with app.app_context():
+        db.create_all()
 
 # 4. ROUTES (LOGIKA WEB)
 @app.route('/')
