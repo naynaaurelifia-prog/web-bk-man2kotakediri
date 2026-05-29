@@ -8,7 +8,7 @@ SUPABASE_URL = "https://owxkabzlenxmpoyuyttm.supabase.co"
 SUPABASE_KEY = "sb_publishable_7f4QJTIGVa-g1e8gOt5v_w_VsjWdUj2"
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
-# List nama teman-teman kamu (Sesuai kode asli kamu tanpa diubah)
+# List nama teman-teman kamu (Utuh & Aman!)
 teman = {
     'AFRIALDY': 'afrialdy123', 'AHMAD FAIRUZ NADHIR AMRULLOH': 'faiz123',
     'AHMADA DAKA ELJEISA FATIR': 'jesa123', 'ANNISA AZIZAH NUR AQLIS': 'annisa123',
@@ -34,21 +34,26 @@ teman = {
 def home():
     return render_template('index.html')
 
-@app.route('/tambah_pelanggaran', methods=['POST'])
-def tambah_pelnggaran():
-    nama_dari_form = request.form.get('nama_siswa')
-    kelas_dari_form = request.form.get('kelas')
-    pelanggaran_dari_form = request.form.get('pelanggaran')
-    tanggal_dari_form = request.form.get('tanggal_waktu') # Diperbaiki typo tanda petiknya
-    
-    data = {
-        "nama_siswa": nama_dari_form,
-        "kelas": kelas_dari_form,
-        "pelanggaran": pelanggaran_dari_form,
-        "tanggal_waktu": tanggal_dari_form
-    }
-    supabase.table("Pelanggaran").insert(data).execute()
-    return redirect(url_for('home')) 
+# === RUTE TAMBAH PELANGGARAN MILIKMU (Sudah Kembali & Ditambahkan Fitur Supabase) ===
+@app.route('/tambah_pelanggaran', methods=['GET', 'POST'])
+def tambah_pelanggaran():
+    if request.method == 'POST':
+        nama_dari_form = request.form.get('nama_siswa')
+        kelas_dari_form = request.form.get('kelas')
+        pelanggaran_dari_form = request.form.get('pelanggaran')
+        tanggal_dari_form = request.form.get('tanggal_waktu')
+        
+        data = {
+            "nama_siswa": nama_dari_form,
+            "kelas": kelas_dari_form,
+            "pelanggaran": pelanggaran_dari_form,
+            "tanggal_waktu": tanggal_dari_form
+        }
+        # Menyimpan data langsung ke tabel Supabase online
+        supabase.table("Pelanggaran").insert(data).execute()
+        return redirect(url_for('home'))
+        
+    return redirect(url_for('home'))
 
 @app.route('/login_siswa', methods=['GET', 'POST'])
 def login_siswa():
@@ -56,7 +61,6 @@ def login_siswa():
         nama_input = request.form.get('nama')
         pw_input = request.form.get('password')
         
-        # Mengecek langsung ke list teman di atas (Menggantikan baris Pelanggaran.query yang error)
         if nama_input in teman and teman[nama_input] == pw_input:
             return redirect(url_for('siswa', nama=nama_input))
         return "Login Gagal! Cek Nama (KAPITAL) & Password."
@@ -67,7 +71,7 @@ def siswa():
     nama_user = request.args.get('nama', 'SISWA')
     data_siswa = {'nama_siswa': nama_user, 'kelas': '10'}
     
-    # Nyelipin Supabase: mengambil riwayat pelanggaran khusus siswa yang sedang login
+    # Mengambil riwayat pelanggaran khusus siswa dari Supabase
     respon = supabase.table("Pelanggaran").select("*").eq("nama_siswa", nama_user).execute()
     riwayat_pelanggaran = respon.data if respon.data else []
     
@@ -91,7 +95,7 @@ def login_guru():
 def guru():
     nama_bk = request.args.get('nama', 'Guru BK')
     
-    # Nyelipin Supabase: mengambil semua data pelanggaran dari cloud untuk Guru BK
+    # Mengambil semua data pelanggaran dari Supabase untuk Guru BK
     respon = supabase.table("Pelanggaran").select("*").execute()
     semua_data = respon.data if respon.data else []
     
