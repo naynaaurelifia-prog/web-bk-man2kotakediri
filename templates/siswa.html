@@ -50,60 +50,20 @@
         .search-bar input { padding: 8px 14px; border: 1px solid #cbd5e1; border-radius: 6px; width: 250px; font-size: 13px; outline: none; }
         .search-bar input:focus { border-color: #0b4b6b; }
 
-        /* ========================================================
-           UPGRADE RESPONSIF HP: JURUS ANTI-CROP
-           ======================================================== */
+        /* UPGRADE RESPONSIF HP */
         @media (max-width: 768px) {
-            body { 
-                flex-direction: column !important; 
-                height: auto !important; 
-                overflow: auto !important; 
-            }
-            .sidebar { 
-                width: 100% !important; 
-                height: auto !important; 
-                padding: 15px 20px !important; 
-            }
-            .sidebar-header { 
-                margin-bottom: 10px !important; 
-                padding-bottom: 10px !important; 
-            }
-            .menu-list { 
-                display: none !important; /* Ringkas tampilan HP */
-            }
-            .main-content { 
-                width: 100% !important; 
-                height: auto !important; 
-                overflow: visible !important; 
-            }
-            .header { 
-                padding: 15px 20px !important; 
-                flex-direction: column !important; 
-                align-items: flex-start !important; 
-                gap: 15px !important; 
-            }
-            .header-right { 
-                width: 100% !important; 
-                justify-content: space-between !important; 
-                border-top: 1px solid #eee !important; 
-                padding-top: 12px !important; 
-            }
-            .date-info { 
-                text-align: left !important; 
-                min-width: auto !important; 
-            }
-            .content-body { 
-                padding: 15px !important; 
-            }
-            .table-card { 
-                padding: 15px !important; 
-            }
-            .search-bar { 
-                justify-content: flex-start !important; 
-            }
-            .search-bar input { 
-                width: 100% !important; 
-            }
+            body { flex-direction: column !important; height: auto !important; overflow: auto !important; }
+            .sidebar { width: 100% !important; height: auto !important; padding: 15px 20px !important; }
+            .sidebar-header { margin-bottom: 10px !important; padding-bottom: 10px !important; }
+            .menu-list { display: none !important; }
+            .main-content { width: 100% !important; height: auto !important; overflow: visible !important; }
+            .header { padding: 15px 20px !important; flex-direction: column !important; align-items: flex-start !important; gap: 15px !important; }
+            .header-right { width: 100% !important; justify-content: space-between !important; border-top: 1px solid #eee !important; padding-top: 12px !important; }
+            .date-info { text-align: left !important; min-width: auto !important; }
+            .content-body { padding: 15px !important; }
+            .table-card { padding: 15px !important; }
+            .search-bar { justify-content: flex-start !important; }
+            .search-bar input { width: 100% !important; }
         }
     </style>
 </head>
@@ -134,7 +94,7 @@
                 <div class="user-profile">
                     <div style="text-align: right">
                         <p style="font-size: 12px; font-weight: bold; color: #1e293b;">{{ siswa.nama_siswa }}</p>
-                        <p style="font-size: 10px; color: #64748b; font-weight: 500;">Kelas {{ siswa.kelas }}</p>
+                        <p style="font-size: 10px; color: #64748b; font-weight: 500;">Siswa</p>
                     </div>
                     <div class="avatar"><i class="fa fa-user"></i></div>
                 </div>
@@ -161,8 +121,8 @@
                                 {% for p in riwayat %}
                                 <tr>
                                     <td>{{ loop.index }}</td>
-                                    <td>{{ p.jenis_pelanggaran }}</td>
-                                    <td>{{ p.waktu.strftime('%d/%m/%Y %H:%M') }}</td>
+                                    <td>{{ p.pelanggaran }}</td> <!-- DISESUAIKAN: Kolom Supabase -->
+                                    <td>{{ p.tanggal_waktu }}</td> <!-- DISESUAIKAN: Langsung panggil teks tanggal -->
                                 </tr>
                                 {% endfor %}
                             {% else %}
@@ -188,7 +148,7 @@
         function updateClock() {
             const sekarang = new Date();
             const opsiTanggal = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-            const tanggalStr = sekarang.toLocaleDateString('id-ID', opsiTanggal);
+            const tanggalStr = Clinical = sekarang.toLocaleDateString('id-ID', opsiTanggal);
             
             const jam = String(sekarang.getHours()).padStart(2, '0');
             const menit = String(sekarang.getMinutes()).padStart(2, '0');
