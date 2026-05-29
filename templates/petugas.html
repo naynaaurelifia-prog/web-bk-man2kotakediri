@@ -4,8 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lapor Pelanggaran - BK MAN 2 KOTA KEDIRI</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        /* CSS ASLIMU (TIDAK ADA YANG DIUBAH) */
+        /* CSS TETAP PAKAI PUNYAMU YANG KEREN */
         body {
             background: linear-gradient(135deg, rgba(45, 62, 150, 0.9) 0%, rgba(26, 37, 90, 0.95) 100%), 
                         url("{{ url_for('static', filename='1000107070.jpg') }}");
@@ -97,6 +98,18 @@
             font-size: 0.85em;
         }
 
+        /* Style tambahan buat pesan sukses agar tidak nabrak */
+        .alert-success {
+            background-color: #d4edda; 
+            color: #155724; 
+            padding: 12px; 
+            border-radius: 20px; 
+            margin: 20px 25px 0 25px; /* Margin biar pas di tengah card */
+            text-align: center; 
+            font-size: 0.85em; 
+            border: 1px solid #c3e6cb;
+        }
+
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
@@ -109,6 +122,16 @@
         <div class="header">
             <h2>Masuk sebagai petugas</h2>
         </div>
+
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert-success">
+                        <i class="fa fa-check-circle"></i> {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
     
         <div class="form-content">
             <form action="/petugas" method="POST">
