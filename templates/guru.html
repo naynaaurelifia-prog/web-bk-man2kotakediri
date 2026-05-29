@@ -60,61 +60,20 @@
         .search-bar { margin-bottom: 15px; display: flex; justify-content: flex-end; }
         .search-bar input { padding: 8px 14px; border: 1px solid #cbd5e1; border-radius: 6px; width: 250px; font-size: 13px; outline: none; }
 
-        /* ========================================================
-           UPGRADE RESPONSIF HP: MEMAKSA LAYOUT TURUN KE BAWAH
-           ======================================================== */
+        /* UPGRADE RESPONSIF HP */
         @media (max-width: 768px) {
-            body { 
-                flex-direction: column !important; 
-                height: auto !important; 
-                overflow: auto !important; 
-            }
-            .sidebar { 
-                width: 100% !important; 
-                height: auto !important; 
-                padding: 20px !important; 
-                flex-shrink: 1 !important;
-            }
-            .sidebar-header { 
-                margin-bottom: 15px !important; 
-                padding-bottom: 10px !important; 
-            }
-            .menu-list { 
-                display: none !important; /* Menyembunyikan link duplikat biar ringkas di HP */
-            }
-            .main-content { 
-                width: 100% !important; 
-                height: auto !important; 
-                overflow: visible !important; 
-            }
-            .header { 
-                padding: 15px 20px !important; 
-                flex-direction: column !important; 
-                align-items: flex-start !important; 
-                gap: 15px !important; 
-            }
-            .header-right { 
-                width: 100% !important; 
-                justify-content: space-between !important; 
-                border-top: 1px solid #eee !important; 
-                padding-top: 12px !important; 
-            }
-            .date-info { 
-                text-align: left !important; 
-                min-width: auto !important; 
-            }
-            .content-body { 
-                padding: 15px !important; 
-            }
-            .table-card { 
-                padding: 15px !important; 
-            }
-            .search-bar { 
-                justify-content: flex-start !important; 
-            }
-            .search-bar input { 
-                width: 100% !important; 
-            }
+            body { flex-direction: column !important; height: auto !important; overflow: auto !important; }
+            .sidebar { width: 100% !important; height: auto !important; padding: 20px !important; flex-shrink: 1 !important; }
+            .sidebar-header { margin-bottom: 15px !important; padding-bottom: 10px !important; }
+            .menu-list { display: none !important; }
+            .main-content { width: 100% !important; height: auto !important; overflow: visible !important; }
+            .header { padding: 15px 20px !important; flex-direction: column !important; align-items: flex-start !important; gap: 15px !important; }
+            .header-right { width: 100% !important; justify-content: space-between !important; border-top: 1px solid #eee !important; padding-top: 12px !important; }
+            .date-info { text-align: left !important; min-width: auto !important; }
+            .content-body { padding: 15px !important; }
+            .table-card { padding: 15px !important; }
+            .search-bar { justify-content: flex-start !important; }
+            .search-bar input { width: 100% !important; }
         }
     </style>
 </head>
@@ -168,16 +127,18 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {% if riwayat %}
-                                {% for p in riwayat %}
+                            <!-- DISESUAIKAN: Menggunakan data_pelanggaran dari app.py -->
+                            {% if data_pelanggaran %}
+                                {% for p in data_pelanggaran %}
                                 <tr>
                                     <td>{{ loop.index }}</td>
                                     <td>{{ p.nama_siswa }}</td>
                                     <td>{{ p.kelas }}</td>
-                                    <td>{{ p.jenis_pelanggaran }}</td>
-                                    <td>{{ p.waktu.strftime('%d/%m/%Y %H:%M') }}</td>
+                                    <td>{{ p.pelanggaran }}</td> <!-- DISESUAIKAN dengan kolom Supabase -->
+                                    <td>{{ p.tanggal_waktu }}</td> <!-- DISESUAIKAN langsung string Supabase -->
                                     <td>
-                                        <a href="/hapus/{{ p.id }}" class="btn-delete" onclick="return confirm('Yakin ingin menghapus laporan ini?')">
+                                        <!-- DISESUAIKAN: Rute mengarah ke /hapus_pelanggaran/ID -->
+                                        <a href="/hapus_pelanggaran/{{ p.id }}" class="btn-delete" onclick="return confirm('Yakin ingin menghapus laporan ini?')">
                                             <i class="fa fa-trash"></i> Hapus
                                         </a>
                                     </td>
