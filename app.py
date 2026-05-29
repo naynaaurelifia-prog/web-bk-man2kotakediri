@@ -4,17 +4,13 @@ from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
-
-# 1. KONFIGURASI DATABASE & SECRET KEY
 app.config['SECRET_KEY'] = 'berylaurel'
-# Pakai garis miring 4 (////) dan folder /tmp/ agar tidak ditolak hosting
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/database_bk.db'
+# Gunakan alamat absolut ke /tmp/ agar Vercel tidak bisa menolak
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/data_bk_man2.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-# 2. KONEKSIKAN DATABASE KE APP
 db = SQLAlchemy(app)
 
-# 3. MODEL DATABASE
 class Riwayat(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     nama_siswa = db.Column(db.String(100), nullable=False)
@@ -22,18 +18,18 @@ class Riwayat(db.Model):
     jenis_pelanggaran = db.Column(db.String(100), nullable=False)
     waktu = db.Column(db.DateTime, default=datetime.now)
 
-# Membuat database secara otomatis di folder /tmp/ (yang diizinkan hosting)
+# Fungsi buat mastiin database dibuat tanpa bikin error saat startup
 def buat_db():
     with app.app_context():
         db.create_all()
 
-# 4. ROUTES (LOGIKA WEB)
 @app.route('/')
 def home():
     return render_template('index.html')
 
 @app.route('/petugas', methods=['GET', 'POST'])
 def petugas():
+    buat_db() # Buat database saat ada data masuk pertama kali
     if request.method == 'POST':
         nama = request.form.get('nama_siswa')
         kelas = request.form.get('kelas')
@@ -43,15 +39,18 @@ def petugas():
         db.session.add(laporan_baru)
         db.session.commit()
         
-        flash("Laporan Berhasil Terkirim ke Guru BK!")
+        flash("Laporan Berhasil Terkirim!")
         return redirect(url_for('petugas')) 
-        
     return render_template('petugas.html')
 
 @app.route('/guru')
 def guru():
+    buat_db()
     nama_bk = request.args.get('nama', 'Guru BK')
-    semua_laporan = Riwayat.query.all()
+    try:
+        semua_laporan = Riwayat.query.all()
+    except:
+        semua_laporan = []
     return render_template('guru.html', riwayat=semua_laporan, nama_guru=nama_bk)
 
 @app.route('/hapus/<int:id>')
