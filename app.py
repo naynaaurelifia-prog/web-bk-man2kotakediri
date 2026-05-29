@@ -1,15 +1,19 @@
-from flask import Flask, render_template, request, redirect, url_for, flash
-from flask_sqlalchemy import SQLAlchemy
 import os
 from datetime import datetime
+from flask import Flask, render_template, request, redirect, url_for, flash
+from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 
-# 1. KONFIGURASI DATABASE (Biar permanen di folder project)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite://:memory:'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SECRET_KEY'] = 'berylaurel' # Ini kunci rahasia buat pesan flash
+# 1. DEFINISIKAN BASEDIR DULU (Biar Python tahu jalan foldernya)
+basedir = os.path.abspath(os.path.dirname(__file__))
 
+# 2. KONFIGURASI DATABASE & SECRET KEY
+app.config['SECRET_KEY'] = 'berylaurel'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'database_bk.db')
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+# 3. KONEKSIKAN DATABASE KE APP
 db = SQLAlchemy(app)
 
 # 2. MODEL DATABASE
@@ -39,7 +43,6 @@ def petugas():
         db.session.add(laporan_baru)
         db.session.commit()
         
-        # Ini yang bikin pesan sukses muncul
         flash("Laporan Berhasil Terkirim ke Guru BK!")
         return redirect(url_for('petugas')) 
         
@@ -57,7 +60,7 @@ def hapus_laporan(id):
     if laporan:
         db.session.delete(laporan)
         db.session.commit()
-    return redirect('/guru')
+    return redirect(url_for('guru')) # Diubah ke url_for('guru') agar lebih aman di hosting
 
 if __name__ == "__main__":
     app.run(debug=True)
