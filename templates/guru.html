@@ -59,6 +59,63 @@
 
         .search-bar { margin-bottom: 15px; display: flex; justify-content: flex-end; }
         .search-bar input { padding: 8px 14px; border: 1px solid #cbd5e1; border-radius: 6px; width: 250px; font-size: 13px; outline: none; }
+
+        /* ========================================================
+           UPGRADE RESPONSIF HP: MEMAKSA LAYOUT TURUN KE BAWAH
+           ======================================================== */
+        @media (max-width: 768px) {
+            body { 
+                flex-direction: column !important; 
+                height: auto !important; 
+                overflow: auto !important; 
+            }
+            .sidebar { 
+                width: 100% !important; 
+                height: auto !important; 
+                padding: 20px !important; 
+                flex-shrink: 1 !important;
+            }
+            .sidebar-header { 
+                margin-bottom: 15px !important; 
+                padding-bottom: 10px !important; 
+            }
+            .menu-list { 
+                display: none !important; /* Menyembunyikan link duplikat biar ringkas di HP */
+            }
+            .main-content { 
+                width: 100% !important; 
+                height: auto !important; 
+                overflow: visible !important; 
+            }
+            .header { 
+                padding: 15px 20px !important; 
+                flex-direction: column !important; 
+                align-items: flex-start !important; 
+                gap: 15px !important; 
+            }
+            .header-right { 
+                width: 100% !important; 
+                justify-content: space-between !important; 
+                border-top: 1px solid #eee !important; 
+                padding-top: 12px !important; 
+            }
+            .date-info { 
+                text-align: left !important; 
+                min-width: auto !important; 
+            }
+            .content-body { 
+                padding: 15px !important; 
+            }
+            .table-card { 
+                padding: 15px !important; 
+            }
+            .search-bar { 
+                justify-content: flex-start !important; 
+            }
+            .search-bar input { 
+                width: 100% !important; 
+            }
+        }
     </style>
 </head>
 <body>
@@ -108,7 +165,7 @@
                                 <th>Pelanggaran</th>
                                 <th style="width: 180px;">Tanggal & Waktu</th>
                                 <th style="width: 100px;">Aksi</th>
-                            </tr> <!-- Nah, penutup barisnya ditaruh rapi di bawah sini -->
+                            </tr>
                         </thead>
                         <tbody>
                             {% if riwayat %}
