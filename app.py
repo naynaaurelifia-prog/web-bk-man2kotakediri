@@ -6,7 +6,7 @@ from datetime import datetime
 app = Flask(__name__)
 
 # 1. KONFIGURASI DATABASE (Biar permanen di folder project)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database_aman.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database_baru_banget.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = 'berylaurel' # Ini kunci rahasia buat pesan flash
 
