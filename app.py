@@ -49,6 +49,21 @@ with app.app_context():
 @app.route('/')
 def home():
     return render_template('index.html')
+@app.route('/tambah_pelanggaran', methods=['POST'])
+def tambah_pelnggaran():
+    nama_dari_form = request.form.get('nama_siswa')
+    kelas_dari_form = request.form.get('kelas')
+    pelanggaran_dari_form = request.form.get('pelanggaran')
+    tanggal_dari_form = request.form.get(tanggal_wakty')
+    data = {
+        "nama_siswa": nama_dari_form,
+        "kelas": kelas_dari_form,
+        "pelanggaran": pelanggaran_dari_form,
+        "tanggal_waktu": tanggal_dari_form
+    }
+    supabase.table("Pelanggaran").insert(data).execute()
+    return redirect(url_for('home')) 
+                                         
 
 @app.route('/login_siswa', methods=['GET', 'POST'])
 def login_siswa():
