@@ -5,8 +5,8 @@ from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'berylaurel'
-# Gunakan alamat absolut ke /tmp/ agar Vercel tidak bisa menolak
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/data_bk_man2.db'
+# Alamat database khusus folder sementara server
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/database_bk.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
@@ -18,18 +18,17 @@ class Riwayat(db.Model):
     jenis_pelanggaran = db.Column(db.String(100), nullable=False)
     waktu = db.Column(db.DateTime, default=datetime.now)
 
-# Fungsi buat mastiin database dibuat tanpa bikin error saat startup
-def buat_db():
-    with app.app_context():
-        db.create_all()
-
+# ROUTES
 @app.route('/')
 def home():
     return render_template('index.html')
 
 @app.route('/petugas', methods=['GET', 'POST'])
 def petugas():
-    buat_db() # Buat database saat ada data masuk pertama kali
+    # Buat database HANYA saat ada yang akses halaman ini
+    with app.app_context():
+        db.create_all()
+        
     if request.method == 'POST':
         nama = request.form.get('nama_siswa')
         kelas = request.form.get('kelas')
@@ -45,7 +44,8 @@ def petugas():
 
 @app.route('/guru')
 def guru():
-    buat_db()
+    with app.app_context():
+        db.create_all()
     nama_bk = request.args.get('nama', 'Guru BK')
     try:
         semua_laporan = Riwayat.query.all()
@@ -60,6 +60,3 @@ def hapus_laporan(id):
         db.session.delete(laporan)
         db.session.commit()
     return redirect(url_for('guru'))
-
-if __name__ == "__main__":
-    app.run(debug=True)
