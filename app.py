@@ -34,7 +34,7 @@ teman = {
 def home():
     return render_template('index.html')
 
-# === RUTE TAMBAH PELANGGARAN MILIKMU (Sudah Kembali & Ditambahkan Fitur Supabase) ===
+# === RUTE TAMBAH PELANGGARAN ===
 @app.route('/tambah_pelanggaran', methods=['GET', 'POST'])
 def tambah_pelanggaran():
     if request.method == 'POST':
@@ -49,12 +49,12 @@ def tambah_pelanggaran():
             "pelanggaran": pelanggaran_dari_form,
             "tanggal_waktu": tanggal_dari_form
         }
-        # Menyimpan data langsung ke tabel Supabase online
         supabase.table("Pelanggaran").insert(data).execute()
         return "<script>alert('Laporan Telah Terkirim ke Guru BK'); window.location.href='/';</script>"
         
     return redirect(url_for('home'))
 
+# === RUTE LOGIN SISWA (SUDAH ADA!) ===
 @app.route('/login_siswa', methods=['GET', 'POST'])
 def login_siswa():
     if request.method == 'POST':
@@ -69,17 +69,15 @@ def login_siswa():
 @app.route('/siswa')
 def siswa():
     nama_user = request.args.get('nama', 'SISWA')
-    
-    # Mengambil riwayat pelanggaran khusus siswa dari Supabase
     respon = supabase.table("Pelanggaran").select("*").eq("nama_siswa", nama_user).execute()
     riwayat = respon.data
-    
     return render_template('siswa.html', siswa={'nama_siswa': nama_user}, riwayat=riwayat)
 
 @app.route('/petugas')
 def petugas():
     return render_template('petugas.html')
 
+# === RUTE LOGIN GURU ===
 @app.route('/login_guru', methods=['GET', 'POST'])
 def login_guru():
     if request.method == 'POST':
@@ -95,10 +93,9 @@ def guru():
     nama_bk = request.args.get('nama', 'Guru BK')
     respon = supabase.table("Pelanggaran").select("*").execute()
     semua_data = respon.data
-    
     return render_template('guru.html', data_pelanggaran=semua_data, nama_guru=nama_bk)
 
-# === RUTE HAPUS (Sudah Diperbaiki Kurung Siku Tutupnya) ===
+# === RUTE HAPUS ===
 @app.route('/hapus_pelanggaran/<int:id_laporan>')
 def hapus_pelanggaran(id_laporan):
     supabase.table("Pelanggaran").delete().eq("id", id_laporan).execute()
